@@ -45,6 +45,7 @@ describe("Todo Application", function () {
     const todoID = parsedResponse.id;
 
     expect(parsedResponse.completed).toBe(false);
+
     const markCompleteResponse = await agent
       .put(`/todos/${todoID}/markASCompleted`)
       .send();
@@ -71,18 +72,15 @@ describe("Todo Application", function () {
   });
 
   test("Deletes a todo with the given ID if it exists and sends a boolean response", async () => {
-    // FILL IN YOUR CODE HERE
     const response = await agent.post("/todos").send({
-      title: "Buy notes",
+      title: "Buy milk",
       dueDate: new Date().toISOString(),
       completed: false,
     });
+    const parsedResponse = JSON.parse(response.text);
+    const todoID = parsedResponse.id;
 
-    const parseResponse = JSON.parse(response.text);
-    const todoID = parseResponse.id;
-
-    const deleteResponse = await agent.delete(`/todos/${todoID}`).send();
-    const parsedDeleteResponse = JSON.parse(deleteResponse.text);
-    expect(parsedDeleteResponse).toBe(true);
+    const deleteResponse = await agent.delete(`/todos/${todoID}`);
+    expect(deleteResponse.text).toBe("true");
   });
 });
